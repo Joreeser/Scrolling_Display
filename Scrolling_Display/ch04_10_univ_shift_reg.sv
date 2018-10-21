@@ -4,7 +4,7 @@ module univ_shift_reg
    (
     input  logic clk, reset,
     input  logic [1:0] ctrl,
-    input  logic [N-1:0] d,
+    input  logic [3:0] d,
     output logic [N-1:0] q
    );
 
@@ -24,7 +24,7 @@ module univ_shift_reg
       case(ctrl)
         2'b00: r_next = r_reg;                  // no op
         2'b01: r_next = {r_reg[N-2:0], d[0]};   // shift left
-        2'b10: r_next = {d[N-1], r_reg[N-1:1]}; // shift right
+        2'b10: r_next = {d, r_reg[N-1:4]}; // shift right
         default: r_next = d;                    // load
       endcase
    // output logic

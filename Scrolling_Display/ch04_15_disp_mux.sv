@@ -2,8 +2,8 @@
 module disp_mux
    (
     input  logic clk, reset,
-    input  logic [7:0] in3, in2, in1, in0,
-    output logic [3:0] an,   // enable
+    input  logic [7:0] in7, in6, in5, in4, in3, in2, in1, in0,
+    output logic [7:0] an,   // enable
     output logic [7:0] sseg  // led segments
    );
 
@@ -29,26 +29,46 @@ module disp_mux
    // 2 MSBs of counter to control 4-to-1 multiplexing
    // and to generate active-low enable signal
    always_comb
-      case (q_reg[N-1:N-2])
-         2'b00:
+      case (q_reg[N-1:N-3])
+         3'b000:
             begin
-               an = 4'b1110;
+               an = 8'b11111110;
                sseg = in0;
             end
-         2'b01:
+         3'b001:
             begin
-               an =  4'b1101;
+               an =  8'b11111101;
                sseg = in1;
             end
-         2'b10:
+         3'b010:
             begin
-               an =  4'b1011;
+               an =  8'b11111011;
                sseg = in2;
+            end
+         3'b011:
+            begin
+                an = 8'b11110111;
+                sseg = in3;
+            end
+         3'b100:
+            begin
+                an = 8'b11101111;
+                sseg = in4;
+            end
+         3'b101:
+            begin
+                an = 8'b11011111;
+                sseg = in5;
+            end
+         3'b110:
+            begin
+                an = 8'b10111111;
+                sseg = in6;
             end
          default:
             begin
-               an =  4'b0111;
-               sseg = in3;
+               an =  8'b01111111;
+               sseg = in7;
             end
        endcase
 endmodule
