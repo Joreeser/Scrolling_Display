@@ -160,8 +160,8 @@ proc create_root_design { parentCell } {
   set clk_b [ create_bd_port -dir I -type clk clk_b ]
   set data_in [ create_bd_port -dir I -from 15 -to 0 -type data data_in ]
   set data_out [ create_bd_port -dir O -from 3 -to 0 -type data data_out ]
-  set en_a [ create_bd_port -dir I -type ce en_a ]
-  set en_b [ create_bd_port -dir I -type ce en_b ]
+  set en_a [ create_bd_port -dir I en_a ]
+  set en_b [ create_bd_port -dir I en_b ]
   set write_en [ create_bd_port -dir I write_en ]
 
   # Create instance: blk_mem_gen_0, and set properties

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Sun Oct 21 17:35:46 2018" VIVADOVERSION="2017.2.1">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Fri Oct 26 15:37:59 2018" VIVADOVERSION="2017.2.1">
 
   <SYSTEMINFO ARCH="artix7" BOARD="digilentinc.com:nexys4_ddr:part0:1.1" DEVICE="7a100t" NAME="bram" PACKAGE="csg324" SPEEDGRADE="-1"/>
 
@@ -17,11 +17,6 @@
     <PORT DIR="I" LEFT="15" NAME="data_in" RIGHT="0" SIGIS="data" SIGNAME="External_Ports_data_in">
       <CONNECTIONS>
         <CONNECTION INSTANCE="blk_mem_gen_0" PORT="dina"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="en_a" SIGIS="ce" SIGNAME="External_Ports_en_a">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="blk_mem_gen_0" PORT="ena"/>
       </CONNECTIONS>
     </PORT>
     <PORT DIR="I" NAME="write_en" SIGIS="undef" SIGNAME="External_Ports_write_en">
@@ -44,7 +39,12 @@
         <CONNECTION INSTANCE="blk_mem_gen_0" PORT="doutb"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="I" NAME="en_b" SIGIS="ce" SIGNAME="External_Ports_en_b">
+    <PORT DIR="I" NAME="en_a" SIGIS="undef" SIGNAME="External_Ports_en_a">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="blk_mem_gen_0" PORT="ena"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" NAME="en_b" SIGIS="undef" SIGNAME="External_Ports_en_b">
       <CONNECTIONS>
         <CONNECTION INSTANCE="blk_mem_gen_0" PORT="enb"/>
       </CONNECTIONS>
@@ -205,7 +205,7 @@
         <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" NAME="clka" SIGIS="clk" SIGNAME="External_Ports_clk_a">
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="clka" SIGIS="clk" SIGNAME="External_Ports_clk_a">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="clk_a"/>
           </CONNECTIONS>
@@ -230,7 +230,7 @@
             <CONNECTION INSTANCE="External_Ports" PORT="data_in"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="clkb" SIGIS="clk" SIGNAME="External_Ports_clk_b">
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="clkb" SIGIS="clk" SIGNAME="External_Ports_clk_b">
           <CONNECTIONS>
             <CONNECTION INSTANCE="External_Ports" PORT="clk_b"/>
           </CONNECTIONS>

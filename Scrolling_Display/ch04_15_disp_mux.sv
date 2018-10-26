@@ -2,7 +2,7 @@
 module disp_mux
    (
     input  logic clk, reset,
-    input  logic [7:0] in7, in6, in5, in4, in3, in2, in1, in0,
+    input  logic [6:0] in7, in6, in5, in4, in3, in2, in1, in0,
     output logic [7:0] an,   // enable
     output logic [7:0] sseg  // led segments
    );

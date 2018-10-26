@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xE2E799C761F111F4" bd:device="xc7a100tcsg324-1" bd:isValidated="true" bd:synthFlowMode="Hierarchical" bd:tool_version="2017.2.1" bd:top="bram" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xE2E799C7DF3A2427" bd:device="xc7a100tcsg324-1" bd:isValidated="true" bd:synthFlowMode="Hierarchical" bd:tool_version="2017.2.1" bd:top="bram" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -90,35 +90,6 @@
         </spirit:parameters>
       </spirit:busInterface>
       <spirit:busInterface>
-        <spirit:name>CE.EN_A</spirit:name>
-        <spirit:displayName>ClkEnable</spirit:displayName>
-        <spirit:description>Clock Enable</spirit:description>
-        <spirit:busType spirit:library="signal" spirit:name="clockenable" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:abstractionType spirit:library="signal" spirit:name="clockenable_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:slave/>
-        <spirit:portMaps>
-          <spirit:portMap>
-            <spirit:logicalPort>
-              <spirit:name>CE</spirit:name>
-            </spirit:logicalPort>
-            <spirit:physicalPort>
-              <spirit:name>en_a</spirit:name>
-            </spirit:physicalPort>
-          </spirit:portMap>
-        </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>POLARITY</spirit:name>
-            <spirit:value>ACTIVE_LOW</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:busInterface>
-      <spirit:busInterface>
         <spirit:name>CLK.CLK_B</spirit:name>
         <spirit:displayName>Clk</spirit:displayName>
         <spirit:description>Clock</spirit:description>
@@ -194,35 +165,6 @@
           </spirit:parameter>
         </spirit:parameters>
       </spirit:busInterface>
-      <spirit:busInterface>
-        <spirit:name>CE.EN_B</spirit:name>
-        <spirit:displayName>ClkEnable</spirit:displayName>
-        <spirit:description>Clock Enable</spirit:description>
-        <spirit:busType spirit:library="signal" spirit:name="clockenable" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:abstractionType spirit:library="signal" spirit:name="clockenable_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:slave/>
-        <spirit:portMaps>
-          <spirit:portMap>
-            <spirit:logicalPort>
-              <spirit:name>CE</spirit:name>
-            </spirit:logicalPort>
-            <spirit:physicalPort>
-              <spirit:name>en_b</spirit:name>
-            </spirit:physicalPort>
-          </spirit:portMap>
-        </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>POLARITY</spirit:name>
-            <spirit:value>ACTIVE_LOW</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:busInterface>
     </spirit:busInterfaces>
     <spirit:model>
       <spirit:views>
@@ -260,12 +202,6 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>en_a</spirit:name>
-          <spirit:wire>
-            <spirit:direction>in</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
           <spirit:name>write_en</spirit:name>
           <spirit:wire>
             <spirit:direction>in</spirit:direction>
@@ -295,6 +231,12 @@
               <spirit:left>3</spirit:left>
               <spirit:right>0</spirit:right>
             </spirit:vector>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>en_a</spirit:name>
+          <spirit:wire>
+            <spirit:direction>in</spirit:direction>
           </spirit:wire>
         </spirit:port>
         <spirit:port>
@@ -353,11 +295,6 @@
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="dina"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>en_a_1</spirit:name>
-        <spirit:externalPortReference spirit:portRef="en_a"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="ena"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
         <spirit:name>write_en_1</spirit:name>
         <spirit:externalPortReference spirit:portRef="write_en"/>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="wea"/>
@@ -376,6 +313,11 @@
         <spirit:name>blk_mem_gen_0_doutb</spirit:name>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="doutb"/>
         <spirit:externalPortReference spirit:portRef="data_out"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>en_a_1</spirit:name>
+        <spirit:externalPortReference spirit:portRef="en_a"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="ena"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>en_b_1</spirit:name>

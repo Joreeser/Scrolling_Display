@@ -1,7 +1,7 @@
 //Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-//Date        : Sun Oct 21 17:35:45 2018
+//Date        : Fri Oct 26 15:37:59 2018
 //Host        : ROG-115-10 running 64-bit major release  (build 9200)
 //Command     : generate_target bram.bd
 //Design      : bram
