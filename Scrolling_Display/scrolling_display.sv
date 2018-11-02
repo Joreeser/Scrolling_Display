@@ -6,14 +6,15 @@ module scrolling_display(
     output logic [7:0] an, sseg,
     output logic [15:0] led);
     
-    logic [3:0] addra, secs1, secs2;
+    logic [3:0] addra;
     logic [5:0] addrb;
-    logic ena, enb, write_en, reset, tick, stop, enter;
+    logic ena, enb, write_en, tick, enter;
     logic [15:0] data_in;
     logic [3:0] data_out;
     logic [31:0] disp_val;
     logic [63:0] hex;
-       
+    
+    // Initialize state definitions   
     typedef enum {DEF_DISP, DISPLAY, PROG} scrolling_states;
     scrolling_states state, next_state;
     
@@ -22,7 +23,8 @@ module scrolling_display(
             state <= DEF_DISP;
         else
             state <= next_state;
-            
+    
+    // State logic        
     always_comb
     begin        
         case (state)
@@ -31,8 +33,7 @@ module scrolling_display(
             ena = 1;
             enb = 1;
             write_en = 0;
-            led = 16'd0;
-            stop = 0;            
+            led = 16'b0;           
             if(prog)
                 next_state = PROG;
             else
@@ -42,7 +43,6 @@ module scrolling_display(
         PROG:
         begin
             data_in = sw;
-            stop = 1;
             led = 16'hFFFF;
             
             if(enter)
@@ -57,7 +57,7 @@ module scrolling_display(
         DISPLAY:
         begin 
             write_en = 0;
-            stop = 0;
+            led = 16'b0;
                        
             if (reset)
                 next_state = DEF_DISP;
@@ -69,31 +69,107 @@ module scrolling_display(
         endcase
     end
     
-    //mod_m_counter#(.M(100000000)) time1(.clk(clk), .reset(reset), .max_tick(time1_tick));
-    //counter#(.SIZE(4)) time1_count(.clk(time1_tick), .reset(rest | hold1), .count(secs1));
+    // BRAM instantiation
+    bram_wrapper bram1(
+        addra, 
+        addrb, 
+        clk, 
+        clk, 
+        data_in, 
+        data_out, 
+        ena, 
+        enb, 
+        write_en);
     
-    //counter#(.SIZE(4)) time2_count(.clk(time1_tick), .reset(rest | hold2), .count(secs2));
+    // Button debouncer for enter button
+    debounce debounce_sd(
+        .clk(clk), 
+        .reset(reset), 
+        .sw(enter_btn), 
+        .db_level(enter), 
+        .db_tick());
     
+    // Create tick every second for shift reg
+    mod_m_counter#(.M(100000000)) mem_out_delay(
+        .clk(clk), 
+        .reset(reset), 
+        .max_tick(tick), 
+        .q());
     
-    bram_wrapper bram1(addra, addrb, clk, clk, data_in, data_out, ena, enb, write_en);
+    // Shift BRAM output for scrolling display   
+    univ_shift_reg#(.N(32)) shift(
+        .clk(tick), 
+        .reset(reset), 
+        .ctrl(2'b10), 
+        .d(data_out), 
+        .q(disp_val));
     
-    debounce debounce_sd(.clk(clk), .reset(reset), .sw(enter_btn), .db_level(), .db_tick(enter));
+    // Counter to increment address out of BRAM    
+    counter#(.SIZE(6)) mem_out_count(
+        .clk(tick), 
+        .reset(reset), 
+        .count(addrb));
     
-    mod_m_counter#(.M(100000000)) mem_out_delay(.clk(clk), .reset(reset), .max_tick(tick), .q());
-    univ_shift_reg#(.N(32)) shift(.clk(tick), .reset(reset), .ctrl(2'b10), .d(data_out), .q(disp_val));
-    counter#(.SIZE(6)) mem_out_count(.clk(tick), .reset(reset | stop), .count(addrb));
-    counter#(.SIZE(4)) addr_in(.clk(enter), .reset(reset), .count(addra)); 
-    hex_to_sseg display_val0(.hex(disp_val[3:0]), .dp(1), .sseg(hex[7:0]));
-    hex_to_sseg display_val1(.hex(disp_val[7:4]), .dp(1), .sseg(hex[15:8]));
-    hex_to_sseg display_val2(.hex(disp_val[11:8]), .dp(1), .sseg(hex[23:16]));
-    hex_to_sseg display_val3(.hex(disp_val[15:12]), .dp(1), .sseg(hex[31:24]));
-    hex_to_sseg display_val4(.hex(disp_val[19:16]), .dp(1), .sseg(hex[39:32]));
-    hex_to_sseg display_val5(.hex(disp_val[23:20]), .dp(1), .sseg(hex[47:40]));
-    hex_to_sseg display_val6(.hex(disp_val[27:24]), .dp(1), .sseg(hex[55:48]));
-    hex_to_sseg display_val7(.hex(disp_val[31:28]), .dp(1), .sseg(hex[63:56]));
-    disp_mux display(.clk(clk), .reset(reset), .in0(hex[7:0]), .in1(hex[15:8]), 
-        .in2(hex[23:16]), .in3(hex[31:24]), .in4(hex[39:32]), .in5(hex[47:40]), .in6(hex[55:48]), .in7(hex[63:56]), .an(an), .sseg(sseg));
+    // Counter to increment input address after every input    
+    counter#(.SIZE(4)) addr_in(
+        .clk(enter), 
+        .reset(reset), 
+        .count(addra));
+    
+    // Hex to sseg conversion for 8 displays     
+    hex_to_sseg display_val0(
+        .hex(disp_val[3:0]), 
+        .dp(1), 
+        .sseg(hex[7:0]));
         
+    hex_to_sseg display_val1(
+        .hex(disp_val[7:4]), 
+        .dp(1), 
+        .sseg(hex[15:8]));
+        
+    hex_to_sseg display_val2(
+        .hex(disp_val[11:8]), 
+        .dp(1), 
+        .sseg(hex[23:16]));
+        
+    hex_to_sseg display_val3(
+        .hex(disp_val[15:12]), 
+        .dp(1), 
+        .sseg(hex[31:24]));
+        
+    hex_to_sseg display_val4(
+        .hex(disp_val[19:16]), 
+        .dp(1), 
+        .sseg(hex[39:32]));
+        
+    hex_to_sseg display_val5(
+        .hex(disp_val[23:20]), 
+        .dp(1), 
+        .sseg(hex[47:40]));
+        
+    hex_to_sseg display_val6(
+        .hex(disp_val[27:24]), 
+        .dp(1), 
+        .sseg(hex[55:48]));
+        
+    hex_to_sseg display_val7(
+        .hex(disp_val[31:28]), 
+        .dp(1), 
+        .sseg(hex[63:56]));
     
-    
+    // Display mux    
+    disp_mux display(
+        .clk(clk), 
+        .reset(reset), 
+        .in0(hex[7:0]), 
+        .in1(hex[15:8]), 
+        .in2(hex[23:16]), 
+        .in3(hex[31:24]), 
+        .in4(hex[39:32]), 
+        .in5(hex[47:40]), 
+        .in6(hex[55:48]), 
+        .in7(hex[63:56]), 
+        .an(an), 
+        .sseg(sseg));
+     
 endmodule
